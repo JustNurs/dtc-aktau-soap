@@ -1,13 +1,21 @@
 package com.example.soapservice;
 
+import com.example.soapservice.codeco.CODECOINRequest;
+import com.example.soapservice.codeco.CODECOOUTRequest;
+import com.example.soapservice.codeco.CODECOResponse;
+import com.example.soapservice.coarri.COARRIINRequest;
+import com.example.soapservice.coarri.COARRIOUTRequest;
+import com.example.soapservice.coarri.COARRIResponse;
+import com.example.soapservice.common.HeaderType;
+import com.example.soapservice.expbol.EXPBOLRequest;
+import com.example.soapservice.expbol.EXPBOLResponse;
+import com.example.soapservice.vvnotice.VVNOTICERequest;
+import com.example.soapservice.vvnotice.VVNOTICEResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.ws.client.core.WebServiceTemplate;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.GregorianCalendar;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,55 +25,101 @@ class SoapServiceApplicationTests {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private SoapClient soapClient;
+    private final WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
 
-    @Test
-    void contextLoads() {
+    private Jaxb2Marshaller marshaller(String contextPath) {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        marshaller.setContextPath(contextPath);
+        return marshaller;
     }
 
     @Test
-    void testSendAndReceive() throws Exception {
-        ObjectFactory factory = new ObjectFactory();
-        Data request = factory.createData();
-        MessageType message = factory.createMessageType();
-        HeaderType header = factory.createHeaderType();
+    void testCodecoIn() {
+        webServiceTemplate.setMarshaller(marshaller("com.example.soapservice.codeco"));
+        webServiceTemplate.setUnmarshaller(marshaller("com.example.soapservice.codeco"));
+        com.example.soapservice.codeco.ObjectFactory factory = new com.example.soapservice.codeco.ObjectFactory();
+        CODECOINRequest request = factory.createCODECOINRequest();
+        HeaderType header = new HeaderType();
         header.setMessageId("test-id");
-        header.setSender("test-sender");
-        header.setRecipient("test-recipient");
-        header.setMessageType("INV");
-        message.setHeader(header);
+        request.setHeader(header);
 
-        PayloadType payload = factory.createPayloadType();
-        INVType inv = factory.createINVType();
-        inv.setWagonNumber("12345");
-        inv.setInvoiceNumber("INV-123");
-        inv.setWagonType("Covered");
-        inv.setPreviousStationCode("ST1");
-        inv.setSenderCargo("Sender");
-        inv.setReceiverCargo("Receiver");
-        GregorianCalendar gcal = new GregorianCalendar();
-        XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-        inv.setEtd(xgcal);
-        inv.setForwarderBin("1234567890");
-        CNTType cnt = factory.createCNTType();
-        ContainersType containers = factory.createContainersType();
-        ContainerType container = factory.createContainerType();
-        container.setContainerNumber("C-123");
-        container.setContSyncid("S-123");
-        container.setTareWeight(100.0f);
-        container.setIso("ISO-123");
-        container.setEmpty(false);
-        containers.getContainer().add(container);
-        cnt.setContainers(containers);
-        inv.setCNT(cnt);
-        payload.setINV(inv);
-        message.setPayload(payload);
-        request.setMessage(message);
+        CODECOResponse response = (CODECOResponse) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
+        assertThat(response.getSuccess()).isNotNull();
+        assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+    }
 
-        GetResponse response = soapClient.sendInv("http://localhost:" + port + "/ws/messages", request);
+    @Test
+    void testCodecoOut() {
+        webServiceTemplate.setMarshaller(marshaller("com.example.soapservice.codeco"));
+        webServiceTemplate.setUnmarshaller(marshaller("com.example.soapservice.codeco"));
+        com.example.soapservice.codeco.ObjectFactory factory = new com.example.soapservice.codeco.ObjectFactory();
+        CODECOOUTRequest request = factory.createCODECOOUTRequest();
+        HeaderType header = new HeaderType();
+        header.setMessageId("test-id");
+        request.setHeader(header);
 
-        assertThat(response).isNotNull();
-        assertThat(response.getData().getMessage().getMessageType()).isEqualTo("DONE");
+        CODECOResponse response = (CODECOResponse) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
+        assertThat(response.getSuccess()).isNotNull();
+        assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+    }
+
+    @Test
+    void testCoarriIn() {
+        webServiceTemplate.setMarshaller(marshaller("com.example.soapservice.coarri"));
+        webServiceTemplate.setUnmarshaller(marshaller("com.example.soapservice.coarri"));
+        com.example.soapservice.coarri.ObjectFactory factory = new com.example.soapservice.coarri.ObjectFactory();
+        COARRIINRequest request = factory.createCOARRIINRequest();
+        HeaderType header = new HeaderType();
+        header.setMessageId("test-id");
+        request.setHeader(header);
+
+        COARRIResponse response = (COARRIResponse) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
+        assertThat(response.getSuccess()).isNotNull();
+        assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+    }
+
+    @Test
+    void testCoarriOut() {
+        webServiceTemplate.setMarshaller(marshaller("com.example.soapservice.coarri"));
+        webServiceTemplate.setUnmarshaller(marshaller("com.example.soapservice.coarri"));
+        com.example.soapservice.coarri.ObjectFactory factory = new com.example.soapservice.coarri.ObjectFactory();
+        COARRIOUTRequest request = factory.createCOARRIOUTRequest();
+        HeaderType header = new HeaderType();
+        header.setMessageId("test-id");
+        request.setHeader(header);
+
+        COARRIResponse response = (COARRIResponse) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
+        assertThat(response.getSuccess()).isNotNull();
+        assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+    }
+
+    @Test
+    void testVvNotice() {
+        webServiceTemplate.setMarshaller(marshaller("com.example.soapservice.vvnotice"));
+        webServiceTemplate.setUnmarshaller(marshaller("com.example.soapservice.vvnotice"));
+        com.example.soapservice.vvnotice.ObjectFactory factory = new com.example.soapservice.vvnotice.ObjectFactory();
+        VVNOTICERequest request = factory.createVVNOTICERequest();
+        HeaderType header = new HeaderType();
+        header.setMessageId("test-id");
+        request.setHeader(header);
+
+        VVNOTICEResponse response = (VVNOTICEResponse) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
+        assertThat(response.getSuccess()).isNotNull();
+        assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+    }
+
+    @Test
+    void testExpBol() {
+        webServiceTemplate.setMarshaller(marshaller("com.example.soapservice.expbol"));
+        webServiceTemplate.setUnmarshaller(marshaller("com.example.soapservice.expbol"));
+        com.example.soapservice.expbol.ObjectFactory factory = new com.example.soapservice.expbol.ObjectFactory();
+        EXPBOLRequest request = factory.createEXPBOLRequest();
+        HeaderType header = new HeaderType();
+        header.setMessageId("test-id");
+        request.setHeader(header);
+
+        EXPBOLResponse response = (EXPBOLResponse) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
+        assertThat(response.getSuccess()).isNotNull();
+        assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
     }
 }

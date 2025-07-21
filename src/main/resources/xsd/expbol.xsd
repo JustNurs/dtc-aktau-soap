@@ -1,0 +1,44 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://www.example.com/soapservice/expbol"
+           xmlns:common="http://www.example.com/soapservice/common"
+           targetNamespace="http://www.example.com/soapservice/expbol"
+           elementFormDefault="qualified">
+
+    <xs:import namespace="http://www.example.com/soapservice/common" schemaLocation="common.xsd"/>
+
+    <xs:element name="EXP_BOL_Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="common:HeaderType"/>
+                <xs:element name="BOL_info">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="VesselName" type="xs:string"/>
+                            <xs:element name="VoyageNumber" type="xs:string"/>
+                            <xs:element name="bolNumber" type="xs:string"/>
+                            <xs:element name="bolDate" type="xs:string"/>
+                            <xs:element name="agent" type="xs:string"/>
+                            <xs:element name="LoadPort" type="xs:string"/>
+                            <xs:element name="DischPort" type="xs:string"/>
+                            <xs:element name="SenderCargo" type="xs:string"/>
+                            <xs:element name="ReceiverCargo" type="xs:string"/>
+                            <xs:element name="marksandNumbers" type="xs:string"/>
+                            <xs:element name="FreightAndCharges" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="CNT" type="common:CNTType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="EXP_BOL_Response">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="Success" type="common:SuccessResponse"/>
+                <xs:element name="Error" type="common:ErrorResponse"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
