@@ -6,14 +6,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class SoapServiceApplicationTests {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    private SoapRequestRepository soapRequestRepository;
 
     private final WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
 
@@ -35,6 +41,9 @@ class SoapServiceApplicationTests {
         Response response = (Response) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
         assertThat(response.getSuccess()).isNotNull();
         assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+
+        SoapRequest savedRequest = soapRequestRepository.findAll().get(0);
+        assertThat(savedRequest.getMessageType()).isEqualTo("CODECO_IN");
     }
 
     @Test
@@ -47,6 +56,9 @@ class SoapServiceApplicationTests {
         Response response = (Response) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
         assertThat(response.getSuccess()).isNotNull();
         assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+
+        SoapRequest savedRequest = soapRequestRepository.findAll().get(0);
+        assertThat(savedRequest.getMessageType()).isEqualTo("CODECO_OUT");
     }
 
     @Test
@@ -59,6 +71,9 @@ class SoapServiceApplicationTests {
         Response response = (Response) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
         assertThat(response.getSuccess()).isNotNull();
         assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+
+        SoapRequest savedRequest = soapRequestRepository.findAll().get(0);
+        assertThat(savedRequest.getMessageType()).isEqualTo("COARRI_IN");
     }
 
     @Test
@@ -71,6 +86,9 @@ class SoapServiceApplicationTests {
         Response response = (Response) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
         assertThat(response.getSuccess()).isNotNull();
         assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+
+        SoapRequest savedRequest = soapRequestRepository.findAll().get(0);
+        assertThat(savedRequest.getMessageType()).isEqualTo("COARRI_OUT");
     }
 
     @Test
@@ -83,6 +101,9 @@ class SoapServiceApplicationTests {
         Response response = (Response) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
         assertThat(response.getSuccess()).isNotNull();
         assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+
+        SoapRequest savedRequest = soapRequestRepository.findAll().get(0);
+        assertThat(savedRequest.getMessageType()).isEqualTo("VV_NOTICE");
     }
 
     @Test
@@ -95,5 +116,8 @@ class SoapServiceApplicationTests {
         Response response = (Response) webServiceTemplate.marshalSendAndReceive("http://localhost:" + port + "/ws", request);
         assertThat(response.getSuccess()).isNotNull();
         assertThat(response.getSuccess().getMsgid()).isEqualTo("test-id");
+
+        SoapRequest savedRequest = soapRequestRepository.findAll().get(0);
+        assertThat(savedRequest.getMessageType()).isEqualTo("EXP_BOL");
     }
 }
