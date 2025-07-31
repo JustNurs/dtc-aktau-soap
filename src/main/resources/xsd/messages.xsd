@@ -1,0 +1,230 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://www.example.com/soapservice"
+           targetNamespace="http://www.example.com/soapservice"
+           elementFormDefault="qualified">
+
+    <xs:element name="CODECO_IN_Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="tns:HeaderType"/>
+                <xs:element name="Transport_info">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Direction" type="xs:string" fixed="IN"/>
+                            <xs:element name="TransportKind" type="xs:string"/>
+                            <xs:element name="DocNumber" type="xs:string"/>
+                            <xs:element name="TransportNumber" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="CNT" type="tns:CNTType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="CODECO_OUT_Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="tns:HeaderType"/>
+                <xs:element name="Transport_info">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Direction" type="xs:string" fixed="OUT"/>
+                            <xs:element name="TransportKind" type="xs:string"/>
+                            <xs:element name="DocNumber" type="xs:string"/>
+                            <xs:element name="TransportNumber" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="CNT" type="tns:CNTType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="COARRI_IN_Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="tns:HeaderType"/>
+                <xs:element name="VV_info">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Direction" type="xs:string" fixed="IN"/>
+                            <xs:element name="VesselName" type="xs:string"/>
+                            <xs:element name="VoyageNumber" type="xs:string"/>
+                            <xs:element name="callsign" type="xs:string"/>
+                            <xs:element name="ship_line" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="CNT" type="tns:CNTType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="COARRI_OUT_Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="tns:HeaderType"/>
+                <xs:element name="VV_info">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Direction" type="xs:string" fixed="OUT"/>
+                            <xs:element name="VesselName" type="xs:string"/>
+                            <xs:element name="VoyageNumber" type="xs:string"/>
+                            <xs:element name="callsign" type="xs:string"/>
+                            <xs:element name="ship_line" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="CNT" type="tns:CNTType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="VV_NOTICE_Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="tns:HeaderType"/>
+                <xs:element name="VV_info">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="PortCode" type="xs:string"/>
+                            <xs:element name="VesselName" type="xs:string"/>
+                            <xs:element name="VoyageNumberIn" type="xs:string"/>
+                            <xs:element name="VoyageNumberOut" type="xs:string"/>
+                            <xs:element name="callsign" type="xs:string"/>
+                            <xs:element name="ship_line" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Operations">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Operation" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="OperType" type="xs:string"/>
+                                        <xs:element name="OperDateTime" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="CNT" type="tns:CNTType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="EXP_BOL_Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="tns:HeaderType"/>
+                <xs:element name="BOL_info">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="VesselName" type="xs:string"/>
+                            <xs:element name="VoyageNumber" type="xs:string"/>
+                            <xs:element name="bolNumber" type="xs:string"/>
+                            <xs:element name="bolDate" type="xs:string"/>
+                            <xs:element name="agent" type="xs:string"/>
+                            <xs:element name="LoadPort" type="xs:string"/>
+                            <xs:element name="DischPort" type="xs:string"/>
+                            <xs:element name="SenderCargo" type="xs:string"/>
+                            <xs:element name="ReceiverCargo" type="xs:string"/>
+                            <xs:element name="marksandNumbers" type="xs:string"/>
+                            <xs:element name="FreightAndCharges" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="CNT" type="tns:CNTType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Response">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="Success" type="tns:SuccessResponse"/>
+                <xs:element name="Error" type="tns:ErrorResponse"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="HeaderType">
+        <xs:sequence>
+            <xs:element name="messageId" type="xs:string"/>
+            <xs:element name="Sender" type="xs:string"/>
+            <xs:element name="Recipient" type="xs:string"/>
+            <xs:element name="MessageType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="CODECO_IN"/>
+                        <xs:enumeration value="CODECO_OUT"/>
+                        <xs:enumeration value="COARRI_IN"/>
+                        <xs:enumeration value="COARRI_OUT"/>
+                        <xs:enumeration value="VV_NOTICE"/>
+                        <xs:enumeration value="EXP_BOL"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CNTType">
+        <xs:sequence>
+            <xs:element name="Container" type="tns:ContainerType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ContainerType">
+        <xs:sequence>
+            <xs:element name="ContainerNumber" type="xs:string"/>
+            <xs:element name="Cont_syncid" type="xs:string"/>
+            <xs:element name="TareWeight" type="xs:float" minOccurs="0"/>
+            <xs:element name="NetWeight" type="xs:float" minOccurs="0"/>
+            <xs:element name="GrossWeight" type="xs:float" minOccurs="0"/>
+            <xs:element name="BruttoWeight" type="xs:float" minOccurs="0"/>
+            <xs:element name="Iso" type="xs:string" minOccurs="0"/>
+            <xs:element name="Empty" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="OperationDateTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="LoadPort" type="xs:string" minOccurs="0"/>
+            <xs:element name="DischPort" type="xs:string" minOccurs="0"/>
+            <xs:element name="LoadRollback" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="Cargos" type="tns:CargosType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CargosType">
+        <xs:sequence>
+            <xs:element name="Cargo" type="tns:CargoType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CargoType">
+        <xs:sequence>
+            <xs:element name="Quantity" type="xs:integer"/>
+            <xs:element name="NHM" type="xs:string"/>
+            <xs:element name="Description" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SuccessResponse">
+        <xs:sequence>
+            <xs:element name="Sender" type="xs:string"/>
+            <xs:element name="Recipient" type="xs:string"/>
+            <xs:element name="MessageType" type="xs:string" fixed="DONE"/>
+            <xs:element name="Msgid" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ErrorResponse">
+        <xs:sequence>
+            <xs:element name="Sender" type="xs:string"/>
+            <xs:element name="Recipient" type="xs:string"/>
+            <xs:element name="MessageType" type="xs:string" fixed="ERROR"/>
+            <xs:element name="Msgid" type="xs:string"/>
+            <xs:element name="errdescription" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
