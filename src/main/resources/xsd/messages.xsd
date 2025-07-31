@@ -104,7 +104,7 @@
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="OperType" type="xs:string"/>
-                                        <xs:element name="OperDateTime" type="xs:string"/>
+                                        <xs:element name="OperDateTime" type="xs:dateTime"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -126,7 +126,7 @@
                             <xs:element name="VesselName" type="xs:string"/>
                             <xs:element name="VoyageNumber" type="xs:string"/>
                             <xs:element name="bolNumber" type="xs:string"/>
-                            <xs:element name="bolDate" type="xs:string"/>
+                            <xs:element name="bolDate" type="xs:dateTime"/>
                             <xs:element name="agent" type="xs:string"/>
                             <xs:element name="LoadPort" type="xs:string"/>
                             <xs:element name="DischPort" type="xs:string"/>
@@ -171,6 +171,12 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:simpleType name="PositiveFloatType">
+        <xs:restriction base="xs:float">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:complexType name="CNTType">
         <xs:sequence>
             <xs:element name="Container" type="tns:ContainerType" maxOccurs="unbounded"/>
@@ -181,13 +187,13 @@
         <xs:sequence>
             <xs:element name="ContainerNumber" type="xs:string"/>
             <xs:element name="Cont_syncid" type="xs:string"/>
-            <xs:element name="TareWeight" type="xs:float" minOccurs="0"/>
-            <xs:element name="NetWeight" type="xs:float" minOccurs="0"/>
-            <xs:element name="GrossWeight" type="xs:float" minOccurs="0"/>
-            <xs:element name="BruttoWeight" type="xs:float" minOccurs="0"/>
+            <xs:element name="TareWeight" type="tns:PositiveFloatType" minOccurs="0"/>
+            <xs:element name="NetWeight" type="tns:PositiveFloatType" minOccurs="0"/>
+            <xs:element name="GrossWeight" type="tns:PositiveFloatType" minOccurs="0"/>
+            <xs:element name="BruttoWeight" type="tns:PositiveFloatType" minOccurs="0"/>
             <xs:element name="Iso" type="xs:string" minOccurs="0"/>
             <xs:element name="Empty" type="xs:boolean" minOccurs="0"/>
-            <xs:element name="OperationDateTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="OperationDateTime" type="xs:dateTime" minOccurs="0"/>
             <xs:element name="LoadPort" type="xs:string" minOccurs="0"/>
             <xs:element name="DischPort" type="xs:string" minOccurs="0"/>
             <xs:element name="LoadRollback" type="xs:boolean" minOccurs="0"/>
