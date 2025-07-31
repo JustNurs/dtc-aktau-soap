@@ -1,10 +1,15 @@
 package com.example.soapservice;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.StringWriter;
 
 @Endpoint
 public class MessageEndpoint {
@@ -16,7 +21,7 @@ public class MessageEndpoint {
     private void saveRequest(String messageType, Object request) {
         SoapRequest soapRequest = new SoapRequest();
         soapRequest.setMessageType(messageType);
-        soapRequest.setRequestBody(request.toString());
+        soapRequest.setRequestBody(convertToXml(request));
         soapRequestRepository.save(soapRequest);
     }
 
@@ -109,4 +114,20 @@ public class MessageEndpoint {
         response.setSuccess(success);
         return response;
     }
+
+    public String convertToXml(Object obj) {
+        try {
+            JAXBContext context = JAXBContext.newInstance(obj.getClass());
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            StringWriter writer = new StringWriter();
+            marshaller.marshal(obj, writer);
+
+            return writer.toString();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
